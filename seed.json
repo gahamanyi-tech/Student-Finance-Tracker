@@ -1,0 +1,22 @@
+[
+    {
+        "id": "txn_001",
+        "description": "Lunch at cafeteria",
+        "amount": 12.50,
+        "category": "Food",
+        "date": "2026-10-01",
+        "createdAt": "2026-10-01T12:30:00Z",
+        "updatedAt": "2026-10-01T12:30:00Z"
+
+
+    },
+    {
+        "id": "txn_002",
+        "description": "Chemistry Textbook",
+        "amount": 89.99,
+        "category": "Books",
+        "date": "2026-10-02",
+        "createdAt": "2026-10-02T09:15:00Z",
+        "updatedAt": "2026-10-02T09:15:00Z"
+    }
+]

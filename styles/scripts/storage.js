@@ -11,7 +11,7 @@ export function loadRecords() {
 }
 
 export function saveRecords(records) {
-    try {
+    try {}
         localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
 
     } catch (e) {

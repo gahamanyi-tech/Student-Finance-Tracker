@@ -23,7 +23,7 @@ function init(){
 function render(){
     const query = searchInput.value;
     const regex = compileRegex(query);
-
+    
     let filtered = records.filter(item => {
         if (!regex) return true;
         return regex.test(item.description) || regex.test(item.category) || regex.test(String(item.amount));
@@ -33,16 +33,17 @@ function render(){
     const sortVal = sortSelect.value;
     filtered.sort((a, b) => {
         if(sortVal === 'date-desc') return new Date(b.date) - new Date(a.date);
-        if(sortVal === 'date-asc') return new Date(a.date)  - new Date(b.date);
+        if(sortVal === 'date-asc') return new Date(a.date) - new Date(b.date);
         if(sortVal === 'amount-desc') return b.amount - a.amount;
-        if(sortVal === "amount asc") return a.amount - b.amount;
-        if(sortVal === "desc-az") return a.description.localeCompare(b.description);
+        if(sortVal === 'amount-asc') return a.amount - b.amount;
+        if(sortVal === 'desc-az') return a.description.localeCompare(b.description);
         return 0;
     });
 
     tbody.innerHTML = '';
     if(filtered.length === 0){
-        tbody.innerHTML = '<tr><td> colspan="5" style="text-align:center;">No records found.</td></tr> ';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No records found.</td></tr>';
+
     } else {
         filtered.forEach(item => {
             const tr = document.createElement('tr');
@@ -53,11 +54,12 @@ function render(){
             <td>${item.category}</td>
             <td>${item.date}</td>
             <td>
-                <button class="btn-sm edit-btn" data-id="${item.id}">Edit</button>
-                <button class="btn-sm delete-btn" data-id="${item.id}">Delete</button>
-            </td>
+               <button class="btn-sm edit-btn" data-id="${item.id}">Edit</button>
+               <button class="btn-sm delete-btn" data-id="${item.id}">Delete</button>
+            </td>     
             `;
             tbody.appendChild(tr);
+
         });
 
     }
@@ -72,19 +74,21 @@ function render(){
     records.forEach(r => { catCounts[r.category] = (catCounts[r.category] || 0) + 1; });
     let topCat = 'None', maxCount = 0;
     for (const [cat, count] of Object.entries(catCounts)){
-        if (count > maxCount) { maxCount = count; topCat = cat; }
+        if(count > maxCount) {maxCount = count; topCat = cat; }
     }
     statTopCat.textContent = topCat;
 
-    if (sumAmount > budgetCap) {
+    if (sumAmount > budgetCap){
         budgetAlert.setAttribute('aria-live', 'assertive');
-        budgetAlert.textContent = `warning! Budget cap of $${budgetCap} exceeded. Total spent: $${sumAmount.toFixed(2)}`;
-    } else {
-        budgetAlert.setAttribute('aria-live', 'polite');
+        budgetAlert.textContent = `Warning! Budget cap of $${budgetCap} exceeded. Total spent: $${sumAmount.toFixed(2)}`;
+    }else {
+        budgetAlert.setAttribute('aria-live', 'assertive');
         budgetAlert.textContent = `You are within your budget cap. Remaining: $${(budgetCap - sumAmount).toFixed(2)}`;
+
     }
 
     saveRecords(records);
+
 }
 
 function setupEventListeners(){
@@ -94,19 +98,19 @@ function setupEventListeners(){
         const description = document.getElementById('description').value.trim();
         const amount = parseFloat(document.getElementById('amount').value);
         const category = document.getElementById('category').value;
-        const date = document.getElementById('date').value;
+        const date = document.getElementBy('date').value;
 
-        const validation = validateRecord({description, amount, date });
+        const validation = validateRecord({ description, amount, date});
         const descError = document.getElementById('desc-error');
         const amountError = document.getElementById('amount-error');
-        
-        descError.textContent = validation.errors.description || '';
-        amountError.textContent = validation.errors.amount || '';
 
+        if (descError) descError.textContent = validation.errors.description || '';
+        if (amountError) amountError.textContent = validation.errors.amount || '';
+        
         if (!validation.isValid) return;
 
         if (id) {
-            records = records.map(r => r.id === id ? { ...r, description, amount, category, date, updatedAt: new Date().toISOString() } : r);
+            records = records.map(r => r.id === id ? {...r, description, amount, category, date, updatedAt: new Date().toISOString()} :r); 
             editingId = null;
             document.getElementById('form-title').textContent = 'Add New Transaction';
             document.getElementById('submit-btn').textContent = 'Save Record';
@@ -118,7 +122,7 @@ function setupEventListeners(){
                 amount,
                 category,
                 date,
-                createdAt: new Date().toISOString();
+                createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             };
             records.push(newRecord);
@@ -137,7 +141,6 @@ function setupEventListeners(){
                 records = records.filter(r => r.id !== id);
                 render();
             }
-
         } else if (e.target.classList.contains('edit-btn')){
             const rec = records.find(r => r.id === id);
             if (rec){
@@ -152,35 +155,25 @@ function setupEventListeners(){
             }
         }
     });
+    
+    const exportBtn = document.getElementById('export-btn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(records, null, 2));
+            const dLAnchor = document.createElement('a');
+            dLAnchor.setAttribute("href", dataStr);
+            dLAnchor.setAttribute("download", "finance_records.json");
+            document.body.appendChild(dLAnchor);
+            dLAnchor.click();
+            dLAnchor.remove();
+        });
+    }
 
-    document.getElementById('export-btn').addEventListener('click', () => {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(records, null, 2));
-        const dLAnchor = document.createElement('a');
-        dLAnchor.setAtrribute("href", dataStr);
-        dLAnchor.setAttribute("download", "finance_records.json");
-        document.body.appendChild(dLAnchor);
-        dLAnchor.click();
-        dLAnchor.remove();
-    });
-
-    document.getElementById('load-seed-btn').addEventListener('click', async () => {
-        try {
-            const res = await fetch('seed.json');
-            const seedData = await res.json();
-            records = seedData;
-            render();
-            alert('seed data loaded successfully!');
-        } catch (err) {
-            alert('Failed to load seed.json');
-        }
-    });
-
-    document.getElementById('budget-cap-input').addEventListener('input', (e) => {
-        budgetCap = parseFloat(e.target.value) || 0;
-        render();
-
-    });
-
+    const loadSeedBtn = document.getElementById('export-btn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            const dataStr = "data:text/json;charset=utf-8" + encodeURIComponent(JSON.stringify(records, null, 2));
+            const dLAnchor = document.createElement('a');
+        })
+    }
 }
-
-init();

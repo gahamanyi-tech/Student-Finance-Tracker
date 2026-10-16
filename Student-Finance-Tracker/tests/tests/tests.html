@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Unit Test - Student Finance Tracker</title>
+        <style>
+            body { font-family: sans-serif; padding: 2rem; background: #f8fafc; }
+            .pass { color: green; font-weight: bold; }
+            .fail {color: red; font-weight: bold; }
+            ul { list-style: none; padding: 0; }
+            li { background: white; margin-bottom: 0.5rem; padding: 1rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        </style>
+    </head>
+    <body>
+        <h1>Automated Test Suite</h1>
+        <ul id="test-results"></ul>
+
+        <Script type="module">
+            import { validateDescription, validateAmount, validateDate } from '../scripts/validators.js';
+            import { compileRegex, highlightMatches } from '../scripts/search.js';
+
+            const resultsList = document.getElementById('test-results');
+
+            function assert(name, condition) {
+                const li = document.createElement('li');
+                li.innerHTML = `${name}: <span class="${condition ? 'pass' : 'fail'}">${condition ? 'PASSED' : 'FAILED'}</span>`;
+                resultsList.appendChild(li);
+            }
+            assert("Description validator accepts clean text", validateDescription("Lunch at cafeteria") === null);
+            asser("Description validator rejects leading spaces", validateDescription(" Bad description") !== null);
+            assert("Amount validator accepts valid decimal", validateAmount("12.50") === null);
+            assert("Amount validator rejects negative numbers", validateAmount("-5.00") !== null);
+            assert("Date validator accepts YYYY-MM-DD", validateDate("2026-10-15") === null);
+            assert("Date validator rejects incorrect format", validateDate("15-10-2026") !== null);
+            assert("Regex compiler safely handles valid pattern", compileRegex("Food") instanceof RegExp);
+            assert("Regex compiler handles malformed pattern safely", compileRegex("[Unclosed]") === null);
+            assert("Highlight matches wraps tag correctly", highlightMatches("Coffee", /Coffee/i) === "<mark>Coffee</mark>");
+        </Script>
+    </body>
+
+
+
+</html>

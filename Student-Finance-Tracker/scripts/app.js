@@ -296,20 +296,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            const targetId = link.getAttribute('href').substring(1);
+            const href = link.getAttribute('href');
+            if (!href || !href.startsWith('#')) return;
+
+            e.preventDefault();
+            const targetId = href.substring(1);
             const targetSection = document.getElementById(targetId);
 
             if (targetSection) {
-                e.preventDefault();
 
                 sections.forEach(sec => sec.classList.remove('active'));
+                navLinks.forEach(nav => nav.classList.remove('active'));
 
                 targetSection.classList.add('active');
-
-                navLinks.forEach(nav => nav.classList.remove('active'));
                 link.classList.add('active');
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
     });

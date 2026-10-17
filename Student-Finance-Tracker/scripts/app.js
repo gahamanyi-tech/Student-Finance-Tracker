@@ -1,5 +1,5 @@
 import { getTransactions, saveTransactions, addTransaction, deleteTransaction} from './storage.js';
-import { validateDescription, validateAmount, validateDate } from './validators.js';
+import { validateDescription, validateAmount, validateDate, validateCategory } from './validators.js';
 import { compileSearchPattern, highlightMatch } from './search.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
 
         const desc = descInput.value.trim();
-        const amount = amountInput.value;
+        const amountVal = amountInput.value.trim();
         const category = categoryInput.value;
         const date = dateInput.value;
 
@@ -81,7 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
         recordsTbody.innerHTML = '';
 
         if (data.length === 0) {
-            recordsTbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #64748b;">No transaction records found.</td></tr>`;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #64748b;">No transaction records found.</td></tr>`;
+            recordsTbody.appendChild(tr);
             return;
         
         }
@@ -94,34 +96,52 @@ document.addEventListener('DOMContentLoaded', () => {
             const [year, month, day] = tx.date.split('-');
             if (year && month && day) {
                 const dateObj = new Date(year, month -1, day);
-                formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric'});
+                formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             }
            } catch (e) {
                formattedDate = tx.date;
            }
 
-           tr.innerHTML = `
-           <td>${escapeHtml(tx.description)}</td>
-           <td>$${Number(tx.amount).toFixed(2)}</td>
-           <td>${escapeHtml(tx.category)}</td>
-           <td>${escapeHtml(formattedDate)}</td>
-           <td><button> class="btn delete-btn" data-id="${tx.id}" style="background: #ef4444; color: white; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer;">Delete</button></td>
-           `;
-            recordsTbody.appendChild(tr);
+                
+           const tdDesc = document.createElement('td');
+           tdDesc.textContent = tx.description;
 
-        });
+           const tdAmount = document.createElement('td');
+           tdAmount.textContent = `$${Number(tx.amount).toFixed(2)}`;
 
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = e.target.getAttribute('data-id');
-                deleteTransaction(id);
-                transactions = getTransactions();
-                updateUI();
-                announcer.textContent = "Transaction deleted.";
-            });
+           const tdCategory = document.createElement('td');
+           tdCategory.textContent = tx.category;
+
+           const tdDate = document.createElement('td');
+           tdDate.textContent = formattedDate;
+
+           const tdActions = document.createElement('td');
+           const deleteBtn = document.createElement('button');
+           deleteBtn.type = 'button';
+           deleteBtn.className = 'btn delete-btn';
+           deleteBtn.textContent = 'Delete';
+           deleteBtn.setAttribute('data-id', tx.id);
+           deleteBtn.style.cssText = 'background: #ef4444; color: white; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer;';
+
+           deleteBtn.addEventListener('click', () => {
+            deleteTransaction(tx.id);
+            transactions = getTransactions();
+            updateUI();
+            announcer.textContent = "Transaction deleted"
+           });
+
+           tdActions.appendChild(deleteBtn);
+
+           tr.appendChild(tdDesc);
+           tr.appendChild(tdAmount);
+           tr.appendChild(tdCategory);
+           tr.appendChild(tdDate);
+           tr.appendChild(tdActions);
+
+           recordsTbody.appendChild(tr);
         });
     }
-
+        
     function updateStats(data) {
         statCount.textContent = data.length;
 

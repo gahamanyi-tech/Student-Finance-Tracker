@@ -198,5 +198,27 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
+    const exportBtn = document.getElementById('export-btn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            const rawData = localStorage.getItem('student_finance_tracker:data') || '[]';
+            const blob = new Blob([rawData], { type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'student-finance-tracker-backup.json';
+            document.body.appendChild(a);
+            a.click();
+
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            if (announcer) {
+                announcer.textContent = "Transaction data exported successfully.";
+            }
+        });
+    }
+
     updateUI();
 });

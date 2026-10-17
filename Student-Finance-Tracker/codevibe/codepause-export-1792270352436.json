@@ -1,11 +1,11 @@
 {
   "today": {
     "date": "2026-10-17",
-    "totalEvents": 666,
-    "totalAISuggestions": 7,
-    "totalAILines": 125,
-    "totalManualLines": 634,
-    "aiPercentage": 16.469038208168644,
+    "totalEvents": 967,
+    "totalAISuggestions": 15,
+    "totalAILines": 185,
+    "totalManualLines": 914,
+    "aiPercentage": 16.833484986351227,
     "averageReviewTime": 0,
     "sessionCount": 0,
     "toolBreakdown": {
@@ -27,18 +27,18 @@
       },
       "claude-code": {
         "tool": "claude-code",
-        "suggestionCount": 7,
+        "suggestionCount": 15,
         "acceptedCount": 0,
         "rejectedCount": 0,
-        "linesGenerated": 183,
+        "linesGenerated": 407,
         "averageReviewTime": 0
       }
     },
     "reviewQualityScore": 100,
     "unreviewedLines": 0,
     "unreviewedPercentage": 0,
-    "averageFileReviewTime": 604634.5,
-    "reviewedFilesCount": 4
+    "averageFileReviewTime": 2216389.4,
+    "reviewedFilesCount": 5
   },
   "yesterday": {
     "date": "2026-10-16",
@@ -213,11 +213,11 @@
     },
     {
       "date": "2026-10-17",
-      "totalEvents": 666,
-      "totalAISuggestions": 7,
-      "totalAILines": 125,
-      "totalManualLines": 634,
-      "aiPercentage": 16.469038208168644,
+      "totalEvents": 967,
+      "totalAISuggestions": 15,
+      "totalAILines": 185,
+      "totalManualLines": 914,
+      "aiPercentage": 16.833484986351227,
       "averageReviewTime": 0,
       "sessionCount": 0,
       "toolBreakdown": {
@@ -239,10 +239,10 @@
         },
         "claude-code": {
           "tool": "claude-code",
-          "suggestionCount": 7,
+          "suggestionCount": 15,
           "acceptedCount": 0,
           "rejectedCount": 0,
-          "linesGenerated": 183,
+          "linesGenerated": 407,
           "averageReviewTime": 0
         }
       },
@@ -250,8 +250,8 @@
       "unreviewedLines": 0,
       "unreviewedPercentage": 0,
       "agentSessionCount": 0,
-      "averageFileReviewTime": 604634.5,
-      "reviewedFilesCount": 4
+      "averageFileReviewTime": 2216389.4,
+      "reviewedFilesCount": 5
     }
   ],
   "trends": {
@@ -277,19 +277,19 @@
     },
     {
       "tool": "claude-code",
-      "suggestionCount": 7,
+      "suggestionCount": 15,
       "acceptedCount": 0,
       "rejectedCount": 0,
-      "linesGenerated": 183,
+      "linesGenerated": 407,
       "averageReviewTime": 0
     }
   ],
   "codingModes": {
     "agent": {
-      "lines": 183,
-      "events": 7,
-      "reviewedFiles": 4,
-      "totalFiles": 4,
+      "lines": 407,
+      "events": 15,
+      "reviewedFiles": 5,
+      "totalFiles": 5,
       "avgReviewScore": 100,
       "percentage": 100
     },
@@ -306,7 +306,7 @@
       "avgReviewScore": 0,
       "percentage": 0
     },
-    "totalLines": 183
+    "totalLines": 407
   },
   "threshold": {
     "level": "junior",
@@ -343,10 +343,10 @@
   },
   "coreMetrics": {
     "authorship": {
-      "aiPercentage": 16.469038208168644,
-      "manualPercentage": 83.53096179183136,
-      "aiLines": 125,
-      "manualLines": 634,
+      "aiPercentage": 16.833484986351227,
+      "manualPercentage": 83.16651501364878,
+      "aiLines": 185,
+      "manualLines": 914,
       "status": "good",
       "target": 40
     },
@@ -366,7 +366,7 @@
       "trend": "declining",
       "daysWithActivity": 3,
       "extremeAIDays": 0,
-      "variance": 41
+      "variance": 39
     }
   },
   "assignment": null,

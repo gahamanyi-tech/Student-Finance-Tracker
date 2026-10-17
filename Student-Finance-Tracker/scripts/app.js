@@ -50,11 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
 
         const desc = descInput.value.trim();
-        const amount = parseFloat(amountInput.value);
+        const amount = amountInput.value;
         const category = categoryInput.value;
         const date = dateInput.value;
 
-        if (validateDescription(desc) || validateAmount(amount) || validateDate(date) || validateCategory(category)) {
+        if (validateDescription(desc) || validateAmount(amountVal) || validateDate(date) || validateCategory(category)) {
             alert('Please check your inputs. Ensure description is clean, amount is positive,  date is valid, and category is selected');
             return;
         }
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const newTx = {
             id: Date.now().toString(),
             description: desc,
-            amount: amount,
+            amount: parseFloat(amountVal),
             category: category,
             date: date
         };
@@ -88,14 +88,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         data.forEach(tx => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${escapeHtml(tx.description)}</td>
-                <td>$${Number(tx.amount).toFixed(2)}</td>
-                <td>${escapeHtml(tx.category)}</td>
-                <td>${escapeHtml(tx.date)}</td>
-                <td><button class="btn delete-btn" data-id="${tx.id}" style="background: #ef4444; color: white; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer;">Delete</button></td>
 
-            `;
+           let formattedDate = tx.date;
+           try{
+            const [year, month, day] = tx.date.split('-');
+            if (year && month && day) {
+                const dateObj = new Date(year, month -1, day);
+                formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric'});
+            }
+           } catch (e) {
+               formattedDate = tx.date;
+           }
+
+           tr.innerHTML = `
+           <td>${escapeHtml(tx.description)}</td>
+           <td>$${Number(tx.amount).toFixed(2)}</td>
+           <td>${escapeHtml(tx.category)}</td>
+           <td>${escapeHtml(formattedDate)}</td>
+           <td><button> class="btn delete-btn" data-id="${tx.id}" style="background: #ef4444; color: white; padding: 4px 8px; border: none; border-radius: 4px; cursor: pointer;">Delete</button></td>
+           `;
             recordsTbody.appendChild(tr);
 
         });
@@ -133,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const query = e.target.value;
         try {
             const regex = compileSearchPattern(query);
-            const filtered = transactions.filter(tx => tx.description.toLowerCase().includes(query.toLowerCase()));
+            const filtered = transactions.filter(tx => regex.test(tx.description) || regex.test(tx.category));
             renderRecords(filtered);
         } catch {
             

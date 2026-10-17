@@ -14,25 +14,41 @@ export function loadData() {
 export function saveData(data) {
     try {
         localStorage.setItem(KEY, JSON.stringify(data));
-
     } catch (e) {
-        console.error("Failed to save storage data:", e);
+        console.error("Falied to save storage data:", e);
     }
 }
 
-export function vaildateImportData(jsonString) {
+export function getTransactions() {
+    return loadData();
+}
+
+export function addTransaction(tx) {
+    const transactions = loadData();
+    transactions.push(tx);
+    saveData(transactions);
+}
+
+export function deleteTransaction(id) {
+    let transactions = loadData();
+    transactions = transactions.filter(tx => tx.id !== id);
+    saveData(transactions);
+
+}
+
+export function validateImportData(jsonString) {
     try {
         const parsed = JSON.parse(jsonString);
-        if (!Array.isArray(parsed)) return { valid: false, error: "Root must be an array"};
+        if (!Array.isArray(parsed)) return { valid: false, error: "Root must be an array" };
 
         for (const item of parsed) {
-            if (!item.id || typeof item.description !== 'string' || typeof item.amount !== 'nuumber') {
-                return { valid: false, error: "Invalid record structure detected."};
+            if (!item.id || typeof item.description !== 'string' || typeof item.amount !== 'number') {
+                return { valid: false, error: "Invalid record structure delected."};
             }
         }
-        return { valid: true, data: parsed };
+        return { valid:true, data:parsed };
     } catch (e) {
-        return { valid: false, error: "Malformed JSON file"};
+        return { valid: false, error: "Malformed JSON file" };
     }
 }
 

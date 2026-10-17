@@ -1,9 +1,10 @@
-const STORAGE_KEY = 'student_finance-records';
+const STORAGE_KEY = 'student_finance_records';
 
-export function loadRecords() {
+export function loadRecords(){
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
         return raw ? JSON.parse(raw) : [];
+
     } catch (e) {
         console.error('Error loading records', e);
         return [];
@@ -11,10 +12,9 @@ export function loadRecords() {
 }
 
 export function saveRecords(records) {
-    try {}
+    try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-
     } catch (e) {
-        console.error('Error saving records', e)
+        console.error('Error saving records', e);
     }
 }

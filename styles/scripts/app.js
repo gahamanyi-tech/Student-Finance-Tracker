@@ -82,7 +82,7 @@ function render(){
         budgetAlert.setAttribute('aria-live', 'assertive');
         budgetAlert.textContent = `Warning! Budget cap of $${budgetCap} exceeded. Total spent: $${sumAmount.toFixed(2)}`;
     }else {
-        budgetAlert.setAttribute('aria-live', 'assertive');
+        budgetAlert.setAttribute('aria-live', 'polite');
         budgetAlert.textContent = `You are within your budget cap. Remaining: $${(budgetCap - sumAmount).toFixed(2)}`;
 
     }
@@ -98,14 +98,16 @@ function setupEventListeners(){
         const description = document.getElementById('description').value.trim();
         const amount = parseFloat(document.getElementById('amount').value);
         const category = document.getElementById('category').value;
-        const date = document.getElementBy('date').value;
+        const date = document.getElementById('date').value;
 
         const validation = validateRecord({ description, amount, date});
         const descError = document.getElementById('desc-error');
         const amountError = document.getElementById('amount-error');
+        const dateError = document.getElementByID('date-error');
 
         if (descError) descError.textContent = validation.errors.description || '';
         if (amountError) amountError.textContent = validation.errors.amount || '';
+        if (dateError) dateError.textContent = validation.errors.date || '';
         
         if (!validation.isValid) return;
 
@@ -169,11 +171,30 @@ function setupEventListeners(){
         });
     }
 
-    const loadSeedBtn = document.getElementById('export-btn');
-    if (exportBtn) {
-        exportBtn.addEventListener('click', () => {
-            const dataStr = "data:text/json;charset=utf-8" + encodeURIComponent(JSON.stringify(records, null, 2));
-            const dLAnchor = document.createElement('a');
-        })
+    const loadSeedBtn = document.getElementById('load-seed-btn');
+    if (loadSeedBtn) {
+        loadSeedBtn.addEventListener('click', async () => {
+            try {
+                const res = await fetch('seed.json');
+                const seedData = await res.json();
+                records = seedDate;
+                render();
+                alert('Seed data loaded successfully!');
+            } catch (err) {
+                alert('Failed to load seed.json')
+            }
+        });
+
     }
+
+    const budgetInput = document.getElementById('budget-cap-input');
+    if (budgetInput) {
+        budgetInput.addEventListener('input', (e) => {
+            budgetCap = parseFloat(e.target.value) || 0;
+            render();
+        });
+    }
+
 }
+
+init ();

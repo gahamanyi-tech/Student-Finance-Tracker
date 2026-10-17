@@ -15,9 +15,11 @@ export function saveData(data) {
     try {
         localStorage.setItem(KEY, JSON.stringify(data));
     } catch (e) {
-        console.error("Falied to save storage data:", e);
+        console.error("Failed to save storage data:", e);
     }
 }
+
+export { saveData as saveTransactions };
 
 export function getTransactions() {
     return loadData();
@@ -43,7 +45,7 @@ export function validateImportData(jsonString) {
 
         for (const item of parsed) {
             if (!item.id || typeof item.description !== 'string' || typeof item.amount !== 'number') {
-                return { valid: false, error: "Invalid record structure delected."};
+                return { valid: false, error: "Invalid record structure detected."};
             }
         }
         return { valid:true, data:parsed };

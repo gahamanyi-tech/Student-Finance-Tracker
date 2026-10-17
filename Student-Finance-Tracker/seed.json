@@ -1,0 +1,37 @@
+[
+    {
+        "id": "1729000000001",
+        "description": "Software Engineering Textbook",
+        "amount": 45.50,
+        "category": "Books",
+        "date": "2026-10-10"
+    },
+    {
+        "id": "1729000000002",
+        "description": "Cafeteria Lunch",
+        "amount": 8.75,
+        "category": "Food",
+        "date": "2026-10-12"
+    },
+    {
+        "id": "1729000000003",
+        "description": "Monthly Bus Pass",
+        "amount": 30.00,
+        "category": "Transport",
+        "date": "2026-10-01"
+    },
+    {
+        "id": "1729000000004",
+        "description": "Move Night with Study Group",
+        "amount": 15.00,
+        "category": "Entertainment",
+        "date": "2026-10-14"
+    },
+    {
+        "id": "1729000000005",
+        "description": "Semester Library Fee",
+        "amount": 25.00,
+        "category": "Fees",
+        "date": "2026-10-02"
+    }
+]

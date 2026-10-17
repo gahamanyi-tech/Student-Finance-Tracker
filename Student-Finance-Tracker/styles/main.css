@@ -37,7 +37,7 @@ body {
     position: absolute;
     width: 1px; height: 1px;
     padding: 0; margin: -1px;
-    overflow: hidden; clip: rect(0,0,0,0,);
+    overflow: hidden; clip: rect(0,0,0,0);
     white-space: nowrap; border: 0;
 }
 
@@ -72,7 +72,7 @@ body {
     list-style: none;
     gap: 1rem;
     flex-wrap: wrap;
-    justify-content: conter;
+    justify-content: center;
 }
 
 .nav-link {
@@ -159,7 +159,7 @@ th, td {
 
 th {
     background: #f1f5f9;
-    font-weight: 600l
+    font-weight: 600;
 }
 
 mark {
@@ -253,4 +253,12 @@ input:focus, select:focus {
         }
     }
    
+}
+
+.app-section {
+    display: none;
+}
+
+.app-section.active {
+    display: block;
 }

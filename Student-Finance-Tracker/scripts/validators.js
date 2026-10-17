@@ -23,7 +23,7 @@ export function validateAmount(val) {
     return null;
 }
 
-export function validateData(val) {
+export function validateDate(val) {
     if (!val) return "Date is required.";
     if (!DATE_REGEX.test(val)) return "Use valid YYYY-MM-DD format.";
     return null;

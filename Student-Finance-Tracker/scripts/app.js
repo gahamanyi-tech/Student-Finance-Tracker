@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const category = categoryInput.value;
         const date = dateInput.value;
 
-        if (!validateDescription(desc) || !validateAmount(amount) || !validateDate(date)){
-            alert('Please check your inputs. Ensure description is clean, amount is positive, and date is valid.');
+        if (validateDescription(desc) || validateAmount(amount) || validateDate(date) || validateCategory(category)) {
+            alert('Please check your inputs. Ensure description is clean, amount is positive,  date is valid, and category is selected');
             return;
         }
 
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         recordsTbody.innerHTML = '';
 
         if (data.length === 0) {
-            recordsTbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #64748b;">No transaction records found.</td.</tr>`;
+            recordsTbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #64748b;">No transaction records found.</td></tr>`;
             return;
         
         }

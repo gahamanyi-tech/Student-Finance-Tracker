@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale= 1.0">
+    <title>Student Finance Tracker</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="site-header">
+        <div class="container header-content">
+            <h1>Student Finance Tracker</h1>
+            <nav aria-label="Main Navigation">
+                <ul class="nav-list">
+                    <li><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+                    <li><a href="#records" class="nav-link">Records</a></li>
+                    <li><a href="#add-form" class="nav-link">Add Transaction</a></li>
+                    <li><a href="#settings" class="nav-link">Settings</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                </ul>
+            </nav>
+
+        </div>
+
+    </header>
+
+    <div id="announcer" aria-live="polite" class="sr-only"></div>
+
+    <main id="main-content" class="container">
+
+        <section id="dashboard" class="app-section active">
+            <h2>Dashboard & Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Records</h3>
+                    <p id="stat-count">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Expenses</h3>
+                    <p id="stat-sum">$0.00</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Top Category</h3>
+                    <p id="stat-top-cat">None</p>
+                </div>
+                <div class="stat-card budget-card">
+                    <h3>Monthly Budget Cap</h3>
+                    <div class="budget-control">
+                        <label for="budget-cap-input">Cap ($):</label>
+                        <input type="number" id="budget-cap-input" value="500" min="0" step="10">      
+                    </div>
+                    <p id="stat-budget-status">Status: Under budget</p>
+                </div>
+
+            </div>
+            <div class="chart-container">
+                <h3>Last 7 Days Trend</h3>
+                <div id="trend-chart" class="simple-bar-chart"></div>
+            </div>
+
+        </section>
+
+        <section id="records" class="app-section">
+            <h2>Transaction Records</h2>
+            <div class="controls-bar">
+                <div class="search-wrapper">
+                    <label for="search-input">Search / Regex Filter:</label>
+                    <input type="text" id="search-input" placeholder="e.g. Food or \.\d{2}\b">                   
+                </div>
+                <div class="sort-wrapper">
+                    <label for="sort-select">Sort By:</label>
+                    <select id="sort-select">
+                        <option value="date-desc">Date (Newest first)</option>
+                        <option value="date-asc">Date (Oldest first)</option>
+                        <option value="amount-desc">Amount (High to Low)</option>
+                        <option value="amount-asc">Amount (Low to High)</option>
+                        <option value="desc-az">Description (A-z)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="records-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="records-tbody">
+
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <section id="add-form" class="app-section">
+            <h2 id="form-title">Add New Transaction</h2>
+            <form id="transaction-form" novalidate>
+                <input type="hidden" id="record-id">
+
+                <div class="form-group">
+                    <label for="desc-input">Description <span class="required">*</span></label>
+                    <input type="text" id="desc-input" required placeholder="e.g., Lunch at cafeteria">
+                    <small class="error-msg" id="desc-error"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="amount-input">Amount ($) <span class="required">*</span></label>
+                    <input type="number" id="amount-input" step="0.01"required placeholder="12.50">
+                    <small class="error-msg" id="amount-error"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="category-input">Category <span class="required">*</span></label>
+                    <select id="category-input" required>
+                        <option value="Food">Food</option>
+                        <option value="Books">Books</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Fees">Fees</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <small class="error-msg" id="category-error"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="date-input">Date <span class="required">*</span></label>
+                    <input type="date" id="date-input" required>
+                    <small class="error-msg" id="date-error"></small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn primary-btn" id="submit-btn">Save Transaction</button>
+                    <button type="button" class="btn secondary-btn" id="cancel-btn" style="display:none;">Cancel Edit</button>
+                </div>
+            </form>
+
+        </section>
+
+        <section id="settings" class="app-section">
+            <h2>Settings & Data Management</h2>
+            <div class="settings-grid">
+                <div class="setting-card">
+                    <h3>Currency Converter</h3>
+                    <label for="currency-select">Base Display Currency:</label>
+                    <select id="currency-select">
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="GBP">GBP (£)</option>
+                    </select>
+                    <p class="setting-note">Exchange Rates (Manual): EUR = 0.9 USD, GBP = 0.79 USD </p>                   
+                </div>
+                <div class="setting-card">
+                    <h3>Data Backup $ Restore</h3>
+                    <div class="backup-actions">
+                        <button id="export-btn" class="btn primary-btn">Export JSON</button>
+                        <label for="import-file" class="btn secondary-btn file-upload-label">Import JSON</label>
+                        <input type="file" id="import-file" accept=".json" class="sr-only">
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <section id="about" class="app-section">
+            <h2>About Student Finance Tracker</h2>
+            <p>An accessible, responsive vanilla JavaScript web application designed to help university students manage personal budgets, track expenses with robust regex verification,and visualize weekly spending trends.</p>
+            <h3>Contact</h3>
+            <ul>
+                <li>Name: GAHAMANYI Pax Gakundwa</li>
+                <li>Email: g.gahamanyi@alustudent.com</li>
+            </ul>
+
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Student Finance Tracker. Built with semantic HTML, CSS, and Vanilla ES Modules.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="scripts/app.js"></script>
+</body>
+</html>
